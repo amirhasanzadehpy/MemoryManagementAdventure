@@ -1,33 +1,18 @@
 from memory_grid import MemoryGrid
 
-grid = MemoryGrid(block_size=10, num_blocks=5)
-
-
-print("initial memory state:")
+grid = MemoryGrid(100)
+print("\n--- Testing Dynamic Memory Allocation ---")
 grid.view_memory()
 
-print("\nAllocating Data...")
-grid.allocate("Adventure Gear")
-grid.allocate("Map")
-grid.allocate("Sword")
 
-print("\nMemory State After Allocation:")
+grid.allocate_dynamic(size=1, data="Data A")
+grid.allocate_dynamic(size=2, data="Data B")
+grid.allocate_dynamic(size=3, data="Data C")
+
+
+print("\nMemory State After Dynamic Allocations:")
 grid.view_memory()
 
-print("\nFreeing Block 1...")
-grid.free(1)
 
-print("\nMemory State After Freeing Block 1:")
-grid.view_memory()
-
-print("\nAllocating More Data...")
-grid.allocate("Shield")
-grid.allocate("Helmet")
-grid.allocate("Potion")
-
-grid.free(1)
-grid.free(3)
-grid.view_memory()
-
-grid.compact_memory()
-grid.view_memory()
+print("\nTrying to allocate a block of size 12 (too large for available free blocks)...")
+grid.allocate_dynamic(size = 12, data="Data D")
