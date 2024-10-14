@@ -11,15 +11,38 @@ class MemoryGrid:
                 return
         print_rich("[bold red]No free memory blocks available![/bold red]")
 
-    def allocate_dynamic(self, data, size):
-        for block in self.blocks:
-            if not block.occupied and block.size >= size:
-                if block.size > size:
-                    new_block = block.split(size)
+    def allocate_dynamic(self, data, size, strategy='first-fit'):
+        selected_block_index = None
+        if strategy == 'first-fit':
+            for index, block in enumerate(self.blocks):
+                if not block.occupied and block.size >= size:
+                    selected_block_index = index
+                    break
+        elif strategy == 'best-fit':
+            self.view_memory()
+            min_size = float('inf')
+            for index, block in enumerate(self.blocks):
+                if not block.occupied and size <= block.size and block.size < min_size:
+                    selected_block_index = index
+                    min_size = block.size
+        elif strategy == 'worst-fit':
+            max_size = -1
+            for index, block in enumerate(self.blocks):
+                if not block.occupied and block.size >= size and size > max_size:
+                    max_size = block.size
+                    selected_block_index = index
+
+        if selected_block_index is not None:
+            block = self.blocks[selected_block_index]
+            if block.size >= size:
+                new_block = block.split(size)
+                if new_block:
                     self.blocks.append(new_block)
                 block.allocate(data)
-                return
+                return True
+
         print_rich("[bold red]No suitable memory block available![/bold red]")
+        return False
 
     def free(self, block_index):
         if 0 <= block_index < len(self.blocks):
