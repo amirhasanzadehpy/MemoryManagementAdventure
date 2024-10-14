@@ -23,3 +23,10 @@ class MemoryBlock:
 
         else:
             print_rich("[bold red]memory already free![/bold red]")
+
+    def split(self, split_size):
+        if split_size < self.size and not self.occupied:
+            remaining_size = self.size - split_size
+            self.size = split_size
+            return MemoryBlock(remaining_size)
+        return None
