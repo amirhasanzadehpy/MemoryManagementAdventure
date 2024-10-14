@@ -19,9 +19,11 @@ grid.view_memory()
 print("\nTrying to allocate a block of size 12 (too large for available free blocks)...")
 grid.allocate_dynamic(size = 12, data="Data D")
 
-grid.compact_memory()
-grid.view_memory()
-
 grid.allocate_dynamic(size=10, data="Data New")
+grid.free(2)
+grid.free(3)
+
+grid.view_memory()
+grid.merge_free_blocks()
 grid.view_memory()
 
