@@ -33,8 +33,18 @@ class MemoryGrid:
             print_rich(f"[bold green]Block {i}: Size {block.size}, {status}, Data: {block.data}[/bold green]")
 
     def compact_memory(self):
-        occupied_blocks = [block for block in self.blocks if block.occupied]
-        free_blocks = [block for block in self.blocks if not block.occupied]
+        print_rich("[bold green]\nCompacting memory...[/bold green]")
+        allocated_blocks = []
+        free_space = 0
 
-        self.blocks = occupied_blocks + free_blocks
-        print_rich("[bold green]Memory compaction completed. All occupied blocks moved to the beginning.[/bold green]")
+        for block in self.blocks:
+            if block.occupied:
+                allocated_blocks.append(block)
+            else:
+                free_space += block.size
+
+        self.blocks = allocated_blocks
+        if free_space > 0:
+            self.blocks.append(MemoryBlock(free_space))
+
+        print_rich(f"[bold green]Memory compacted. {len(allocated_blocks)} blocks allocated, {free_space} units of free space consolidated.[/bold green]")
