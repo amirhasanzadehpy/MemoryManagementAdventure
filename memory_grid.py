@@ -48,3 +48,16 @@ class MemoryGrid:
             self.blocks.append(MemoryBlock(free_space))
 
         print_rich(f"[bold green]Memory compacted. {len(allocated_blocks)} blocks allocated, {free_space} units of free space consolidated.[/bold green]")
+
+    def merge_free_blocks(self):
+        i = 0
+        while i < len(self.blocks) - 1:
+            current_block = self.blocks[i]
+            next_block = self.blocks[i + 1]
+
+            if not current_block.occupied and not next_block.occupied:
+                current_block.size += next_block.size
+                self.blocks.pop(i+1)
+            else:
+                i += 1
+        print_rich("[bold green]Merging complete. Adjacent free blocks combined.[/bold green]")
