@@ -14,6 +14,9 @@ class MemoryGrid:
     def allocate_dynamic(self, data, size):
         for block in self.blocks:
             if not block.occupied and block.size >= size:
+                if block.size > size:
+                    new_block = block.split(size)
+                    self.blocks.append(new_block)
                 block.allocate(data)
                 return
         print_rich("[bold red]No suitable memory block available![/bold red]")
